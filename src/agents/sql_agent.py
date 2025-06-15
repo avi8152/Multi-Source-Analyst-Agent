@@ -44,9 +44,9 @@ async def sql_node(state):
         match = re.search(r'\{.*\}', query, re.DOTALL)
 
         if match:
-            json_data = match.group()  # Extract JSON
+            json_data = match.group()
             try:
-                query = json5.loads(json_data) # Parse JSON with comments support
+                query = json5.loads(json_data)
             except Exception as e:
                 raise e
         else:
@@ -57,8 +57,6 @@ async def sql_node(state):
         
         result = con.execute(query).fetchdf().to_markdown()
         print(f"SQL Result: {result}")
-        # prompt= f" you are question answering agent. You will have the data from the SQL query result and must respond with a concise answer to the question.\n\nQuestion: {question}\n\nSQL Result:\n{result}\n\nAnswer:"
-        # result = await query_llm(prompt)
             
         return {
             "sql_answer": result
