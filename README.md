@@ -83,24 +83,6 @@ Upload PDFs/CSVs, type your question, and get responses with sources!
 
 ---
 
-## 🛠 Dependencies
-
-See `requirements.txt` for full list:
-- `streamlit`
-- `openai`
-- `langchain`
-- `langchain-openai`
-- `faiss-cpu`
-- `PyPDF2`
-- `duckdb`
-- `fpdf`
-- `langchain-tavily`
-- `pandas`
-- `json5`
-- `python-dotenv`
-
----
-
 ## 📌 Notes
 
 - FAISS is used locally (no vector DB needed).
