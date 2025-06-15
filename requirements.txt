@@ -1,0 +1,12 @@
+streamlit
+openai
+langchain
+langchain-openai
+langchain-community
+langchain-tavily
+PyPDF2
+faiss-cpu
+duckdb
+pandas
+python-dotenv
+json5
