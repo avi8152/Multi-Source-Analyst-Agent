@@ -16,7 +16,6 @@ This project is an intelligent question-answering system powered by Streamlit an
   - Summarizer Agent
 - 📜 Conversational UI with history
 - 📥 Export response to PDF
-- 🌈 Stylish UI with Accenture-like purple theme
 
 ---
 
