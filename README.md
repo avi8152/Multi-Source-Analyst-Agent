@@ -49,7 +49,7 @@ This project is an intelligent question-answering system powered by Streamlit an
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/multi-source-analyst-agent.git
+git clone https://github.com/avi8152/Multi-Source-Analyst-Agent.git
 cd multi-source-analyst-agent
 ```
 
