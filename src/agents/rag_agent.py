@@ -1,6 +1,4 @@
-import os
 from src.utils.pdf_loader import load_and_split_pdfs,search_tool
-from src.clients.openai import query_llm
 
 async def rag_node(state):
     print("RAG node invoked")

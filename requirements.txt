@@ -10,3 +10,9 @@ duckdb
 pandas
 python-dotenv
 json5
+asyncio
+anthropic
+google-generativeai
+langgraph
+langchain-core
+langgraph_supervisor

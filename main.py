@@ -1,12 +1,9 @@
 import asyncio
 import os
 from langgraph.graph import StateGraph,START,END
-from src.agents.sql_agent import sql_node
-from src.agents.rag_agent import rag_node
-from src.agents.web_search_agent import web_search_node
+from src.agents.orchestrator import parallel_tasks_node
 from src.agents.summarize_agent import summarize
 from typing import TypedDict
-from IPython.display import Image, display
 
 
 class State(TypedDict):
@@ -31,54 +28,21 @@ class get_answer_response():
         csv_files = os.listdir("src/data/sheets")
         if csv_files:
             csv_paths = [os.path.join("src/data/sheets", csv) for csv in csv_files] if csv_files else []
-
+        # pdf_paths = []
 
 
         graph = StateGraph(State)
-        graph.add_node("sql", sql_node)
-        graph.add_node("rag", rag_node)
-        graph.add_node("internet", web_search_node)
+
+
+        # graph.add_node("router", router_node)
+        graph.add_node("parallel_tasks", parallel_tasks_node)
         graph.add_node("summarize", summarize)
-
-     
-        graph.add_conditional_edges(
-            START,
-            lambda state: (
-                "sql" if state.get("csv_paths") else
-                "rag" if state.get("pdf_paths") else
-                "internet"
-            ),
-            path_map={"sql": "sql", "rag": "rag", "internet": "internet"}
-        )
-
-        # SQL → RAG and/or Internet → Summarize
-        graph.add_conditional_edges(
-            "sql",
-            lambda state: (
-                "rag" if state.get("pdf_paths") else
-                "internet" if state.get("internet_flag") else
-                "summarize"
-            ),
-            path_map={"rag": "rag", "internet": "internet", "summarize": "summarize"}
-        )
-
-        # RAG → Internet or Summarize
-        graph.add_conditional_edges(
-        "rag",
-        lambda state: "internet" if state.get("internet_flag") else "summarize",
-        path_map={"internet": "internet", "summarize": "summarize"}
-    )
-        graph.add_conditional_edges(
-            "internet",
-            lambda state: "summarize",
-            path_map={"summarize": "summarize"}
-        )
-
+        graph.add_edge(START, "parallel_tasks")
+        graph.add_edge("parallel_tasks", "summarize")
         graph.add_edge("summarize", END)
         # Compile
         agent_executor = graph.compile()
 
-        
  
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
@@ -86,10 +50,15 @@ class get_answer_response():
         "question": question,
         "pdf_paths": pdf_paths,
         "csv_paths":csv_paths,
-        "internet_flag":web_search 
+        "internet_flag":web_search  # Assuming pdf_paths is defined somewhere in your code
         }))
         loop.close()
         return {
         "answer": response['answer'],
         "source": response['source']
     }
+
+if __name__ == "__main__":
+    question = "How many campaigns were conducted in Spanish?"
+    response = get_answer_response.get_answer(question)
+    print(response)

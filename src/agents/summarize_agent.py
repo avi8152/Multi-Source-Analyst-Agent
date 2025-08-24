@@ -1,4 +1,13 @@
-from src.clients.openai import query_llm
+from src.llms import LLMEngine
+import random
+async def get_llm_instances():
+    """
+    Asynchronously selects a LLM client  and retrieves corresponding client instances.
+    """
+    client = LLMEngine()
+    llm_type = random.choice(["OPENAI", "GEMINI"])            
+    llm_instance = await client.get_llm_instance(llm_type=llm_type)
+    return llm_instance
 
 async def summarize(state):
     sql_answer = state.get("sql_answer", "")
@@ -19,7 +28,8 @@ async def summarize(state):
             source.append("Internet")
             template += f"\n Data retrieved from the internet: {internet_answer}"
         print(f"Template for summarization: {template}")
-        result = await query_llm(template)
+        llm_instance = await get_llm_instances()
+        result = await llm_instance.query_llm(template)
         return {
             "answer": result,
             "source":source
